@@ -7,7 +7,6 @@ public class ZombieAI : MonoBehaviour
     [Header("Target")]
     [SerializeField] private Transform player;
 
-    [Header("Detection")]
     [SerializeField] private float detectionRange = 10;
 
     [Header("Combat")]
@@ -24,7 +23,6 @@ public class ZombieAI : MonoBehaviour
 
     private float nextAttackTime;
     private float nextWalkTime;
-    private Vector3 walkTarget;
     private bool isDead;
 
     private void Awake()
@@ -44,6 +42,7 @@ public class ZombieAI : MonoBehaviour
         behaviourTree.Tick();
     }
 
+    // Setting up the behavior tree structure
     private void BuildBehaviourTree()
     {
         Node attackSequence = new Sequence(new List<Node>
@@ -60,6 +59,7 @@ public class ZombieAI : MonoBehaviour
 
         Node walkingAction = new ActionNode(Walk);
 
+        // Attack first, then chase, and then walk if the player is not detected
         behaviourTree = new Selector(new List<Node>
             {
                 attackSequence,
@@ -68,6 +68,7 @@ public class ZombieAI : MonoBehaviour
             });
     }
 
+    // Check if the player is close enoough to chase
     private NodeState IsPlayerDetected()
     {
         if (player == null)
@@ -76,9 +77,16 @@ public class ZombieAI : MonoBehaviour
         }
 
         float distance = Vector3.Distance(transform.position, player.position);
-        return distance <= detectionRange ? NodeState.Success : NodeState.Failure;
+
+        if (distance <= detectionRange)
+        {
+            return NodeState.Success;
+        }
+
+        return NodeState.Failure;
     }
 
+    // Check if the player is close enough to attack
     private NodeState IsPlayerInAttackRange()
     {
         if (player == null)
@@ -87,42 +95,43 @@ public class ZombieAI : MonoBehaviour
         }
 
         float distance = Vector3.Distance(transform.position, player.position);
-        return distance <= attackRange ? NodeState.Success : NodeState.Failure;
-    }
 
-    private NodeState ChasePlayer()
-    {
-        if (player == null)
+        if (distance <= attackRange)
         {
-            return NodeState.Failure;
+            return NodeState.Success;
         }
 
+        return NodeState.Failure;
+    }
+
+    // Move towards the player
+    private NodeState ChasePlayer()
+    {
         agent.isStopped = false;
         agent.SetDestination(player.position);
+
+        FacePlayer();
 
         return NodeState.Running;
     }
 
+    // Attack the player
     private NodeState AttackPlayer()
     {
         if (player == null)
         {
             return NodeState.Failure;
         }
-
+        
         agent.isStopped = true;
 
-        Vector3 direction = player.position - transform.position;
-        direction.y = 0;
+        FacePlayer();
 
-        if (direction.sqrMagnitude > 0.001)
-        {
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 10 * Time.deltaTime);
-        }
-
+        // Attack when the cooldown has finished
         if (Time.time >= nextAttackTime)
         {
             nextAttackTime = Time.time + attackCooldown;
+
             PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
 
             if (playerHealth != null)
@@ -134,29 +143,33 @@ public class ZombieAI : MonoBehaviour
         return NodeState.Running;
     }
 
+    // Walk to random points when the player is not detected
     private NodeState Walk()
     {
         agent.isStopped = false;
 
-        if (Time.time >= nextWalkTime || (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance))
+        // Wait until its time to choose another direction
+        if (Time.time < nextWalkTime && (agent.pathPending || agent.remainingDistance > agent.stoppingDistance))
         {
-            Vector3 randomPoint = transform.position + Random.insideUnitSphere * walkRadius;
-
-            NavMeshHit hit;
-
-            if (NavMesh.SamplePosition(randomPoint, out hit, walkRadius, NavMesh.AllAreas))
-            {
-                walkTarget = hit.position;
-                agent.SetDestination(walkTarget);
-                nextWalkTime = Time.time + walkInterval;
-            }
-
-            nextWalkTime = Time.time + walkInterval;
+            return NodeState.Running;
         }
+
+        Vector3 randomPoint = transform.position + Random.insideUnitSphere * walkRadius;
+
+        NavMeshHit hit;
+
+        // Only walk to a point on the NavMesh
+        if (NavMesh.SamplePosition(randomPoint, out hit, walkRadius, NavMesh.AllAreas))
+        {
+            agent.SetDestination(hit.position);
+        }
+
+        nextWalkTime = Time.time + walkInterval;
 
         return NodeState.Running;
     }
 
+    // Stop the zombie from moving and attacking when it dies
     public void Die()
     {
         isDead = true;
@@ -164,8 +177,23 @@ public class ZombieAI : MonoBehaviour
         agent.enabled = false;
     }
 
+    // Set the player target for the zombie
     public void SetPlayer(Transform target)
     {
         player = target;
+    }
+
+    private void FacePlayer()
+    {
+        // Turn to face the player
+        Vector3 direction = player.position - transform.position;
+        direction.y = 0;
+
+        if (direction != Vector3.zero)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 10 * Time.deltaTime);
+        }
     }
 }

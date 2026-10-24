@@ -3,8 +3,11 @@ using UnityEngine;
 
 public class StatsManager : MonoBehaviour
 {
-    // Reference the "Player Health" script
+    // Reference the Players health script
     [SerializeField] private PlayerHealth playerHealth;
+
+    // Reference to the zombie script
+    [SerializeField] private ZombieAI zombieAI;
 
     [Header("Health")]
     public float playersCurrentHealth;
@@ -39,5 +42,8 @@ public class StatsManager : MonoBehaviour
     {
         // Players current Health
         playersCurrentHealth = playerHealth.currentHealth;
+
+        // Damage taken by the player
+        
     }
 }
