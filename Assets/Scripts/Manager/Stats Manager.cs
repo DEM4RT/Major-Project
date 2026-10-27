@@ -1,4 +1,6 @@
+using Unity.Jobs;
 using Unity.VisualScripting;
+using UnityEditorInternal;
 using UnityEngine;
 
 public class StatsManager : MonoBehaviour
@@ -30,7 +32,7 @@ public class StatsManager : MonoBehaviour
     public float attacksMissed;
     public float timeBetweenAttacks;
     
-
+    // States
 
 
     void Start()
@@ -43,7 +45,8 @@ public class StatsManager : MonoBehaviour
         // Players current Health
         playersCurrentHealth = playerHealth.currentHealth;
 
-        // Damage taken by the player
+        //lowestHealthReached = playersCurrentHealth;
+        
         
     }
 }
