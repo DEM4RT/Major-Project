@@ -546,6 +546,25 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1147840996 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 981222224345452699, guid: 17e3cfa3e2fec08418f96b1eb00a64c8, type: 3}
+  m_PrefabInstance: {fileID: 1389742866655776731}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1147841003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1147840996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bb84cb9c4186144f9a21173b422534b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ZombieHealth
+  maxHealth: 100
+  currentHealth: 0
 --- !u!1 &1165383016
 GameObject:
   m_ObjectHideFlags: 0
@@ -945,9 +964,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Weapon
   firePoint: {fileID: 430290033}
-  shootForce: 900
+  shootForce: 50
   bulletPrefab: {fileID: 7508605551095962728, guid: 50c7b67705c1e55499dc625094593d2b, type: 3}
-  isSemiAuto: 1
+  isSemiAuto: 0
   shootDelay: 0.3
   recoilKickBack: 0.08
   recoilKickUp: 6
@@ -1011,7 +1030,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 981222224345452699, guid: 17e3cfa3e2fec08418f96b1eb00a64c8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1147841003}
   m_SourcePrefab: {fileID: 100100000, guid: 17e3cfa3e2fec08418f96b1eb00a64c8, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

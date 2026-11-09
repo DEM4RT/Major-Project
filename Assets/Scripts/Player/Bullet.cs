@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    [SerializeField] private int damage = 20;
+    [SerializeField] public int damage = 20;
     
     private void Start()
     {

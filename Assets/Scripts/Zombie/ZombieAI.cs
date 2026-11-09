@@ -20,7 +20,6 @@ public class ZombieAI : MonoBehaviour
 
     private NavMeshAgent agent;
     private Node behaviourTree;
-
     private float nextAttackTime;
     private float nextWalkTime;
     private bool isDead;
@@ -175,6 +174,7 @@ public class ZombieAI : MonoBehaviour
         isDead = true;
         agent.isStopped = true;
         agent.enabled = false;
+        Destroy(gameObject);
     }
 
     // Set the player target for the zombie

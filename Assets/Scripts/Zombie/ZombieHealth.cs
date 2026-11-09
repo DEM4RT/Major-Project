@@ -10,17 +10,19 @@ public class ZombieHealth : MonoBehaviour
         currentHealth = maxHealth;
     }
 
-    private void Update()
-    {
-        if (currentHealth <= 0)
-        {
-            Debug.Log("Zombie is dead!");
-            Destroy(gameObject);
-        }
-    }
-
     public void TakeDamage(int amount)
     {
         currentHealth -= amount;
+
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        Debug.Log("Zombie is dead!");
+        Destroy(gameObject);
     }
 }
