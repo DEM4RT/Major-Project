@@ -20,7 +20,7 @@ public class Weapon : MonoBehaviour
     [SerializeField] private int currentAmmo;
     [SerializeField] private float reloadTime = 2;
     private bool isReloading = false;
-
+    private float reloadEndTime;
 
     [Header("Recoil Settings")]
     [SerializeField] private float recoilKickBack = 0.08f;
@@ -36,6 +36,10 @@ public class Weapon : MonoBehaviour
         shootAction = InputSystem.actions.FindAction("Attack");
         shootAction.started += OnAttackButtonPressed;
 
+        // Get the reload action from the Input System
+        reloadAction = InputSystem.actions.FindAction("Reload");
+        reloadAction.started += OnReloadButtonPressed;
+
         // Set starting ammo
         currentAmmo = maxAmmo;
 
@@ -46,8 +50,13 @@ public class Weapon : MonoBehaviour
 
     private void Update()
     {
-        
-        
+        // Check if the weapon is reloading and if the reload time has passed
+        if (isReloading && Time.time >= reloadEndTime)
+        {
+            currentAmmo = maxAmmo;
+            isReloading = false;
+        }
+
         // Check if the weapon is semi-automatic and the shoot action is pressed
         if (!isSemiAuto && shootAction.IsPressed())
         {
@@ -68,8 +77,19 @@ public class Weapon : MonoBehaviour
         }
     }
 
+    private void OnReloadButtonPressed(InputAction.CallbackContext context)
+    {
+        Reload();
+    }
+
     private void Shoot()
     {
+        // Check if the weapon is reloading or out of ammo
+        if (isReloading || currentAmmo <= 0)
+        {
+            return;
+        }
+        
         // Check if the weapon can shoot again based on the shoot delay
         if (Time.time < nextShootTime)
         {
@@ -78,9 +98,15 @@ public class Weapon : MonoBehaviour
 
         // Set the time for the next shot
         nextShootTime = Time.time + shootDelay;
-        
+
+        // Decrease the current ammo count when the weapon is fired
+        currentAmmo--;
+
         // Create a new bullet
         GameObject newBullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+
+        // Make a noise when the weapon is fired
+        NoiseManager.Instance.MakeNoise(firePoint.position, 20);
 
         // Add force to the bullet's Rigidbody to make it move
         Rigidbody bulletRb = newBullet.GetComponent<Rigidbody>();
@@ -94,5 +120,18 @@ public class Weapon : MonoBehaviour
         // Apply recoil to the weapon
         transform.localPosition -= new Vector3(0, 0, recoilKickBack);
         transform.localRotation *= Quaternion.Euler(-recoilKickUp, 0, 0);
+    }
+
+    private void Reload()
+    {
+        // Check if the weapon is already reloading or if the ammo is full
+        if (isReloading || currentAmmo == maxAmmo)
+        {
+            return;
+        }
+
+        isReloading = true;
+
+        reloadEndTime = Time.time + reloadTime;
     }
 }

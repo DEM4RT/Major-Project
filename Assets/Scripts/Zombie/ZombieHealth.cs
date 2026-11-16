@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class ZombieHealth : MonoBehaviour
 {
+    [Header ("Health Settings")]
     public float maxHealth = 100;
     public float currentHealth;
 

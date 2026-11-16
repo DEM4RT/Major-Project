@@ -18,6 +18,13 @@ public class ZombieAI : MonoBehaviour
     [SerializeField] private float walkRadius = 8;
     [SerializeField] private float walkInterval = 4;
 
+    [Header("Investigation")]
+    [SerializeField] private float investigationTime = 5;
+    private ZombieHearing hearing;
+    private Vector3 investigationPosition;
+    private float investigationEndTime;
+    private bool isInvestigating;
+
     private NavMeshAgent agent;
     private Node behaviourTree;
     private float nextAttackTime;
@@ -27,6 +34,7 @@ public class ZombieAI : MonoBehaviour
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
+        hearing = GetComponent<ZombieHearing>();
 
         BuildBehaviourTree();
     }
@@ -57,12 +65,14 @@ public class ZombieAI : MonoBehaviour
             });
 
         Node walkingAction = new ActionNode(Walk);
+        Node investigationAction = new ActionNode(Investigate);
 
-        // Attack first, then chase, and then walk if the player is not detected
+        // Attack first, then chase, investigate and then walk if the player is not detected
         behaviourTree = new Selector(new List<Node>
             {
                 attackSequence,
                 chaseSequence,
+                investigationAction,
                 walkingAction
             });
     }
@@ -195,5 +205,43 @@ public class ZombieAI : MonoBehaviour
 
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 10 * Time.deltaTime);
         }
+    }
+
+    private NodeState Investigate()
+    {
+        // Check if the zombie has heard a noise
+        if (hearing == null || !hearing.HasHeardNoise)
+        {
+            return NodeState.Failure;
+        }
+
+        // If the zombie is not already investigating or if the investigation position has changed, set the investigation position and end time
+        if (!isInvestigating || investigationPosition != hearing.LastHeardPosition)
+        {
+            
+            investigationPosition = hearing.LastHeardPosition;
+            investigationEndTime = Time.time + investigationTime;
+            isInvestigating = true;
+        }
+
+        agent.isStopped = false;
+        agent.SetDestination(investigationPosition);
+
+        // Check if the zombie has reached the investigation position
+        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+        {
+            agent.isStopped = true;
+
+            // If the zombie has reached the investigation position, wait for the investigation time
+            if (Time.time >= investigationEndTime)
+            {
+                isInvestigating = false;
+                hearing.ResetNoise();
+                agent.isStopped = false;
+                return NodeState.Success;
+            }
+        }
+
+        return NodeState.Running;
     }
 }

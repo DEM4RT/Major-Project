@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: 7065021942915943891}
   - component: {fileID: 6382681867508195966}
   - component: {fileID: 8154066385089625359}
+  - component: {fileID: 2827445855359576251}
+  - component: {fileID: 9023560527552187966}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -158,6 +160,33 @@ MonoBehaviour:
   attackCooldown: 1
   walkRadius: 8
   walkInterval: 4
+--- !u!114 &2827445855359576251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 981222224345452699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bb84cb9c4186144f9a21173b422534b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ZombieHealth
+  maxHealth: 100
+  currentHealth: 0
+--- !u!114 &9023560527552187966
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 981222224345452699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b5db69254a47cc4d954d26c8c1aa2c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ZombieHearing
+  hearingRange: 15
 --- !u!1 &1177447145916716374
 GameObject:
   m_ObjectHideFlags: 0
