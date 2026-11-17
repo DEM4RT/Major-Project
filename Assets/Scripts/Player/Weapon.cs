@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 public class Weapon : MonoBehaviour
@@ -16,9 +17,10 @@ public class Weapon : MonoBehaviour
     private InputAction reloadAction;
 
     [Header("Ammo Settings")]
-    [SerializeField] private int maxAmmo = 30;
-    [SerializeField] private int currentAmmo;
+    [SerializeField] private float maxAmmo = 30;
+    [SerializeField] private float currentAmmo;
     [SerializeField] private float reloadTime = 2;
+    [SerializeField] private TextMeshProUGUI ammoCount;
     private bool isReloading = false;
     private float reloadEndTime;
 
@@ -66,6 +68,8 @@ public class Weapon : MonoBehaviour
         // Move the weapon back to its starting position and rotation
         transform.localPosition = Vector3.Lerp(transform.localPosition, startPos, recoilReturnSpeed * Time.deltaTime);
         transform.localRotation = Quaternion.Lerp(transform.localRotation, startRotation, recoilReturnSpeed * Time.deltaTime);
+
+        ammoCount.text = "Ammo count " + currentAmmo + " / 30";
     }
 
     private void OnAttackButtonPressed(InputAction.CallbackContext context)

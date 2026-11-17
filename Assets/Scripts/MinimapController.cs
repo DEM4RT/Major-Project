@@ -11,14 +11,40 @@ public class MinimapController : MonoBehaviour
     private List<GameObject> zombies = new List<GameObject>();
     private List<RectTransform> zombieMarkers = new List<RectTransform>();
 
+    private float enemyCheckTimer;
+    private float enemyCheckDuration = 1;
 
     private void Start()
+    {
+        FindZombies();
+    }
+
+    private void Update()
+    {
+        enemyCheckTimer += Time.deltaTime;
+
+        if(enemyCheckTimer >= enemyCheckDuration)
+        {
+            enemyCheckTimer = 0;
+            FindZombies();
+        }
+
+        UpdateMarkers();
+    }
+
+    private void FindZombies()
     {
         // Find all zombies in the scene
         GameObject[] foundZombies = GameObject.FindGameObjectsWithTag("Enemy");
 
         foreach (GameObject zombie in foundZombies)
         {
+            // Check if this zombie is already being tracked
+            if (zombies.Contains(zombie))
+            {
+                continue;
+            }
+            
             // Add the zombie to the list of zombies
             zombies.Add(zombie);
 
@@ -29,7 +55,7 @@ public class MinimapController : MonoBehaviour
         }
     }
 
-    private void Update()
+    private void UpdateMarkers()
     {
         for (int i = 0; i < zombies.Count; i++)
         {
@@ -45,7 +71,7 @@ public class MinimapController : MonoBehaviour
 
             // Calculate the position of the marker on the minimap
             Vector2 markerPos = new Vector2(direction.x, direction.z) / mapRange * (minimap.rect.width / 2);
-            
+
             // Convert the enemies world position into the position on the minimap
             float halfWidth = minimap.rect.width / 2;
             float halfHeight = minimap.rect.height / 2;
