@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 9023560527552187966}
   m_Layer: 0
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -160,6 +160,7 @@ MonoBehaviour:
   attackCooldown: 1
   walkRadius: 8
   walkInterval: 4
+  investigationTime: 5
 --- !u!114 &2827445855359576251
 MonoBehaviour:
   m_ObjectHideFlags: 0
