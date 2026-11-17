@@ -1093,6 +1093,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1524575541 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5164940494074347196, guid: 17e3cfa3e2fec08418f96b1eb00a64c8, type: 3}
+  m_PrefabInstance: {fileID: 1389742866655776731}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1 &1677499770
 GameObject:
   m_ObjectHideFlags: 0
@@ -1532,6 +1543,34 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 5164940494074347196, guid: 17e3cfa3e2fec08418f96b1eb00a64c8, type: 3}
+      propertyPath: m_fontSize
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 5164940494074347196, guid: 17e3cfa3e2fec08418f96b1eb00a64c8, type: 3}
+      propertyPath: m_fontStyle
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5164940494074347196, guid: 17e3cfa3e2fec08418f96b1eb00a64c8, type: 3}
+      propertyPath: m_fontColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5164940494074347196, guid: 17e3cfa3e2fec08418f96b1eb00a64c8, type: 3}
+      propertyPath: m_fontColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5164940494074347196, guid: 17e3cfa3e2fec08418f96b1eb00a64c8, type: 3}
+      propertyPath: m_fontColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5164940494074347196, guid: 17e3cfa3e2fec08418f96b1eb00a64c8, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 5164940494074347196, guid: 17e3cfa3e2fec08418f96b1eb00a64c8, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4278190080
+      objectReference: {fileID: 0}
     - target: {fileID: 6240491328763771027, guid: 17e3cfa3e2fec08418f96b1eb00a64c8, type: 3}
       propertyPath: m_LocalPosition.x
       value: -29.8
@@ -1576,6 +1615,10 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 1165383020}
+    - target: {fileID: 8154066385089625359, guid: 17e3cfa3e2fec08418f96b1eb00a64c8, type: 3}
+      propertyPath: stateText
+      value: 
+      objectReference: {fileID: 1524575541}
     - target: {fileID: 9023560527552187966, guid: 17e3cfa3e2fec08418f96b1eb00a64c8, type: 3}
       propertyPath: hearingRange
       value: 40

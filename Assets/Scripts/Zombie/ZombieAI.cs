@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -30,6 +31,7 @@ public class ZombieAI : MonoBehaviour
     private float nextAttackTime;
     private float nextWalkTime;
     private bool isDead;
+    public TextMeshProUGUI stateText;
 
     private void Awake()
     {
@@ -47,6 +49,8 @@ public class ZombieAI : MonoBehaviour
         }
 
         behaviourTree.Tick();
+
+        stateText.text = stateText.text;
     }
 
     // Setting up the behavior tree structure
@@ -89,6 +93,7 @@ public class ZombieAI : MonoBehaviour
 
         if (distance <= detectionRange)
         {
+            stateText.text = "Player is detected";
             return NodeState.Success;
         }
 
@@ -107,6 +112,7 @@ public class ZombieAI : MonoBehaviour
 
         if (distance <= attackRange)
         {
+            stateText.text = "Player is in attacking range";
             return NodeState.Success;
         }
 
@@ -120,6 +126,8 @@ public class ZombieAI : MonoBehaviour
         agent.SetDestination(player.position);
 
         FacePlayer();
+
+        stateText.text = "Chasing Player";
 
         return NodeState.Running;
     }
@@ -145,6 +153,7 @@ public class ZombieAI : MonoBehaviour
 
             if (playerHealth != null)
             {
+                stateText.text = "Attacking player";
                 playerHealth.TakeDamage(attackDamage);
             }
         }
@@ -160,6 +169,7 @@ public class ZombieAI : MonoBehaviour
         // Wait until its time to choose another direction
         if (Time.time < nextWalkTime && (agent.pathPending || agent.remainingDistance > agent.stoppingDistance))
         {
+            stateText.text = "Walking";
             return NodeState.Running;
         }
 
@@ -241,7 +251,7 @@ public class ZombieAI : MonoBehaviour
                 return NodeState.Success;
             }
         }
-
+        stateText.text = "Investigating sound";
         return NodeState.Running;
     }
 }

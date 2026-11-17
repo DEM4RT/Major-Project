@@ -11,6 +11,8 @@ public class ZombieHearing : MonoBehaviour
     public Vector3 LastHeardPosition => lastHeardPosition;
     public bool HasHeardNoise => hasHeardNoise;
 
+    private ZombieAI zombieAI;
+
     // Check wether the zombie has heard a sound and if it is within range
     public void HeardSound(Vector3 noisePosition, float noiseRange)
     {
@@ -43,5 +45,13 @@ public class ZombieHearing : MonoBehaviour
     public void ResetNoise()
     {
         hasHeardNoise = false;
+    }
+
+    public void Update()
+    {
+        /*if (hasHeardNoise)
+        {
+            zombieAI.stateText.text = "Heard noise";
+        }*/
     }
 }
