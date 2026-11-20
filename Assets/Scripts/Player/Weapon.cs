@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 public class Weapon : MonoBehaviour
 {
+    private StatsManager stats;
+
     [SerializeField] private Transform firePoint;
     [SerializeField] private float shootForce;
     [SerializeField] private GameObject bulletPrefab;
@@ -32,6 +34,11 @@ public class Weapon : MonoBehaviour
     private Vector3 startPos;
     private Quaternion startRotation;
 
+    private void Awake()
+    {
+        // Find the stat manager gameobject
+        stats = FindAnyObjectByType<StatsManager>();
+    }
     private void Start()
     {
         // Get the shoot action from the Input System
@@ -55,6 +62,7 @@ public class Weapon : MonoBehaviour
         // Check if the weapon is reloading and if the reload time has passed
         if (isReloading && Time.time >= reloadEndTime)
         {
+            // Replenish the ammo
             currentAmmo = maxAmmo;
             isReloading = false;
         }
@@ -109,6 +117,9 @@ public class Weapon : MonoBehaviour
         // Create a new bullet
         GameObject newBullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
 
+        // Increase total shots count
+        stats.TotalShots();
+
         // Make a noise when the weapon is fired
         NoiseManager.Instance.MakeNoise(firePoint.position, 20);
 
@@ -133,6 +144,9 @@ public class Weapon : MonoBehaviour
         {
             return;
         }
+
+        // Call reload count method
+        stats.ReloadCount();
 
         isReloading = true;
 

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 public class SpawnManager : MonoBehaviour
 {
+    private StatsManager stats;
+
     [Header("Zombie Types")]
     [SerializeField] private GameObject[] zombiePrefab;
     [SerializeField] private float spawnRate = 5;
@@ -15,6 +17,12 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private Transform player;
 
     private float spawnTimer;
+
+    private void Awake()
+    {
+        // Find the stat manager gameobject
+        stats = FindAnyObjectByType<StatsManager>();
+    }
 
     private void Update()
     {
@@ -46,9 +54,11 @@ public class SpawnManager : MonoBehaviour
         // Spawn zombie
         GameObject zombie = Instantiate(selectedZombie, spawnPoint.position, spawnPoint.rotation);
 
+        // Call the zombie spawned method
+        stats.ZombiesSpawned();
+
         // Assign the player as the target
         ZombieAI zombieAI = zombie.GetComponent<ZombieAI>();
-
         zombieAI.SetPlayer(player);
     }
 }
